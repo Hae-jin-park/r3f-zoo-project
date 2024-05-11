@@ -18,10 +18,12 @@ export const Animal = ({ name, objectId, onClick, position, ...props }) => {
   const isSelected = objectId === selectedId;
 
   useEffect(() => {
-    actions['Idle'].reset().play();
-  }, []);
+    const ani = isSelected ? 'Walk' : 'Idle';
+    actions[ani].reset().play();
+    return () => actions[ani].fadeOut();
+  }, [isSelected]);
   useFrame((state) => {
-    if (isSelected) {
+    if (isSelected && !isEditMode) {
       const [offsetX, offsetY, offsetZ] = position;
 
       const { x, y, z } = group.current.children[0].position;
